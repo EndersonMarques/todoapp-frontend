@@ -1,7 +1,9 @@
 import React from "react";
+import MainTodoApp from "./components/main";
+import Task from "./components/task";
 
 function App() {
-  return <div className="text-green-500 text-5xl font-bold">Olá mundo</div>;
+  return <MainTodoApp />;
 }
 
 export default App;

@@ -1,11 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { createTask, deleteTask, getTasks } from "../../services/task.service";
+import Modal from "../modal/";
 import Task, { TaskProp } from "../task";
 
 export default function MainTodoApp() {
   const [tasks, setTasks] = useState<TaskProp[]>([]);
   const [newTask, setNewTask] = useState<string>("");
+  const [modal, setModal] = useState(false);
+  const [id, setId] = useState<number | null>(null);
 
   useEffect(() => {
     getTasks().then((resposta) => {
@@ -25,6 +28,7 @@ export default function MainTodoApp() {
     await getAllTasks();
   }
   async function removeTask(id: number) {
+    setModal(false);
     await deleteTask(id);
     await getAllTasks();
   }
@@ -44,7 +48,9 @@ export default function MainTodoApp() {
                 key={key}
                 title={task.title}
                 handleClick={() => {
-                  removeTask(Number(task.id));
+                  setModal(true);
+                  setId(Number(task.id));
+                  // removeTask(Number(task.id));
                 }}
               />
             );
@@ -65,6 +71,13 @@ export default function MainTodoApp() {
           </button>
         </div>
       </div>
+      {modal && (
+        <Modal
+          title="Deseja Cancelar ?"
+          onOkay={() => removeTask(Number(id))}
+          onCancel={() => setModal(false)}
+        />
+      )}
     </div>
   );
 }
